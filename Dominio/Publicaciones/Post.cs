@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public class Post:Publicacion
+    public class Post : Publicacion
     {
         #region Atributes
         public string Img { get; set; }
@@ -16,14 +16,36 @@ namespace Aplicacion
         #endregion
 
         #region Methods
+
+        #region Lists
         public void AddComentario(Comentario c)
         {
-            
+
         }
 
         public List<Comentario> GetComentarios()
         {
             return _comentarios;
+        }
+
+        public List<String> GetFormatos()
+        { 
+            return _formatosPermitidos; 
+        }
+        public void AddFormato(String f)
+        {
+
+        }
+        #endregion
+        public override void EsValida()
+        {
+            base.EsValida();
+            if (!Img.EndsWith(".jpg") || !Img.EndsWith(".png"))
+            {
+                throw new Exception("La imagen no posee un formato válido");
+            }
+
+
         }
         #endregion
     }

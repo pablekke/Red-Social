@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public class Comentario:Publicacion
+    public enum Estado
     {
-        public bool EsPublico { get; set; }
+        aprobada,
+        rechazada,
+        pendiente
     }
 }

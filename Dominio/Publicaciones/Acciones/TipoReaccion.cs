@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public class Invitacion
+    public enum TipoReaccion
     {
+        like,
+        dislike
     }
 }

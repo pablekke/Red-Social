@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public enum Estado
+    public class Reaccion
     {
+        public TipoReaccion TipoReaccion { get; set; }
+        public Miembro Miembro { get; set; }
+
     }
 }
