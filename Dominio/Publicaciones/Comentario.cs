@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,18 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public class Comentario:Publicacion
+    public class Comentario:Publicacion, IValidacion
     {
-        public bool EsPublico { get; set; }
-        public override void EsValida()
+        public Comentario(string titulo, string contenido, Privacidad priv, Miembro autor) :base(titulo, contenido, priv, autor) { }
+
+        public override void EsValido()
         {
-            base.EsValida();
-            if ()
-            {
-                
-            }
+            base.EsValido();
+        }
+
+        public override int CalcularVA()
+        {
+            return base.CalcularVA();
         }
     }
 }
