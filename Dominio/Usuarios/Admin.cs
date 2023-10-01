@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,24 +7,15 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public class Admin:Usuario
+    public class Admin:Usuario, IValidacion
     {
+        public Admin(string email, string pass, bool esAdmin) :base(email,pass,esAdmin) { }
+
+
         #region Methods
-        public void Bloquear(Miembro m)
-        { 
-        
-        }
-        public void DesBloquear(Miembro m)
+        public override void EsValido() 
         {
-
-        }
-        public void CensurarComentarios(Post p)
-        {
-
-        }
-        public void DesCensurarComentarios(Post p)
-        {
-
+            base.EsValido();
         }
         #endregion
     }

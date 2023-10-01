@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,40 +7,133 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public abstract class Publicacion
+    public abstract class Publicacion: IValidacion, IComparable<Publicacion>
     {
         #region Atributes
-        private static int _ultimoId { get; set; } = 1;
+
+        private static int _ultimoId { get; set; }
+
         public int Id { get; set; }
+
         public string Titulo { get; set; }
+
         public string Contenido { get; set; }
+
         public Miembro Autor { get; set; }
+
+        public Privacidad Privacidad { get; set; }
+
         public DateTime fPublicado { get; set; }
+
         private List<Reaccion> _reacciones = new List<Reaccion>();
+
+        #endregion
+
+        #region Constructors
+        public Publicacion(string titulo, string contenido, Privacidad priv, Miembro autor)
+        {
+            Id = _ultimoId++;
+            Titulo = titulo;
+            Contenido = contenido;
+            Autor = autor;
+            Privacidad = priv;
+            fPublicado = DateTime.Now;
+        }
+
+        public Publicacion()
+        {
+            Id = _ultimoId++;
+        }
+
         #endregion
 
         #region Methods
-
-        public virtual void EsValida()
+        public void AddReaccion(Reaccion reaccionNueva)
         {
-            if (Titulo.Length <= 2)
+            if (reaccionNueva is null) 
             {
-                throw new Exception("El título debe tener más de 3 carácteres");
+                throw new Exception("Reaccion vacía");
             }
-            if (String.IsNullOrEmpty(Contenido))
+
+            bool reacciono = false;
+
+            foreach (Reaccion reaccionHecha in _reacciones)
             {
-                throw new Exception("El contenido no debe ser vacío");
+                if (reaccionHecha.Miembro == reaccionNueva.Miembro)
+                {
+                    reaccionHecha.TipoReaccion = reaccionNueva.TipoReaccion;
+                    
+                    reacciono = true;
+                    
+                    break;
+                }
             }
+
+            if (!reacciono) { _reacciones.Add(reaccionNueva); }
+
         }
 
-        public void AddReaccion(Reaccion r)
-        {
-
-        }
         public List<Reaccion> GetReacciones()
         {
             return _reacciones;
         }
+
+        public virtual void EsValido()
+        {
+            if (Titulo.Length < 3)
+            {
+                throw new Exception("El título debe tener más de 3 carácteres");
+            }
+
+            if (String.IsNullOrEmpty(Contenido))
+            {
+                throw new Exception("El contenido no debe ser vacío");
+            }
+
+            if (Autor is null)
+            {
+                throw new Exception("El autor no debe ser vacío");
+            }
+        }
+
+        public virtual int CalcularVA() 
+        {
+            int likes = 0;
+            int dislikes = 0;
+
+            foreach (Reaccion r in _reacciones)
+            {
+                if (r.TipoReaccion == TipoReaccion.like)
+                {
+                    likes++;
+                }
+                else 
+                {
+                    dislikes++;
+                }
+            }
+
+            likes *= 5;
+            dislikes *= -2;
+
+            return likes + dislikes;
+        }
+
+        public int CompareTo(Publicacion? other)
+        {
+            int ret = 0;
+
+            if (Titulo.CompareTo(other.Titulo) > 0)
+            {
+                ret = -1;
+            }
+            if (Titulo.CompareTo(other.Titulo) < 0)
+            {
+                ret = 1;
+            }
+            return ret;
+        }
+
         #endregion
 
     }
