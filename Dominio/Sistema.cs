@@ -18,6 +18,7 @@ namespace Dominio
 
         private static Sistema? instancia = null;
 
+
         public static Sistema GetInstancia()
         {
             if (instancia == null)
