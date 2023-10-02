@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public class Reaccion
+    public class Reaccion: IValidacion
     {
         #region Atributes
 
@@ -25,6 +26,15 @@ namespace Aplicacion
         public Reaccion()
         {
             
+        }
+
+        public void EsValido()
+        {
+            if (Miembro is null)
+            {
+                throw new Exception("Miembro vacío");
+                
+            }
         }
 
         #endregion

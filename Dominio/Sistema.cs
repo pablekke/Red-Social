@@ -16,7 +16,7 @@ namespace Dominio
             Precarga();
         }
 
-        private static Sistema instancia = null;
+        private static Sistema? instancia = null;
 
         public static Sistema GetInstancia()
         {
@@ -54,6 +54,7 @@ namespace Dominio
         public List<Publicacion> GetAllPosts()
         {
             List<Publicacion> posts = new List<Publicacion>();
+
             foreach (Publicacion p in _publicaciones)
             {
                 if (p is Post)
@@ -124,19 +125,14 @@ namespace Dominio
 
         public void AddComentario(Comentario c, Post p)
         {
+            c.EsValido();
+
             if (p is null)
             {
                 throw new Exception("Posts vacío.");
             }
 
             p.EsValido();
-
-            if (c is null)
-            {
-                throw new Exception("Comentario vacío.");
-            }
-
-            c.EsValido();
 
             if (p.Censurada)
             {
@@ -178,21 +174,23 @@ namespace Dominio
             _invitaciones.Add(i);
         }
 
-        public void AddReaccion(Publicacion p, Reaccion reaccionNueva)
+        public void AddReaccion(Publicacion p, Reaccion r)
         {
             if (p is null)
             {
                 throw new Exception("Publicacion vacía");
             }
-            
+
             p.EsValido();
 
-            if (reaccionNueva is null)
+            if (r is null)
             {
                 throw new Exception("Reacción vacía");
             }
 
-            p.AddReaccion(reaccionNueva);
+            r.EsValido();
+
+            p.AddReaccion(r);
         }
 
         #endregion
@@ -235,12 +233,14 @@ namespace Dominio
             i.Declinar();
         }
 
-        public void CensurarPost(Post p) 
+        public void CensurarPost(Post p)
         {
             if (p is null)
             {
                 throw new Exception("Publicacion vacía");
             }
+
+            p.EsValido();
 
             p.Censurar();
         }
@@ -251,6 +251,8 @@ namespace Dominio
             {
                 throw new Exception("Publicacion vacía");
             }
+
+            p.EsValido();
 
             p.DesCensurar();
         }
@@ -319,7 +321,7 @@ namespace Dominio
 
             return pub;
         }
-        public List<Usuario> ObtenerMiembrosConMasPublicaciones() 
+        public List<Usuario> ObtenerMiembrosConMasPublicaciones()
         {
             List<Usuario> ret = new List<Usuario>();
 
@@ -350,7 +352,7 @@ namespace Dominio
             return ret;
         }
 
-        public List<Publicacion> OrdenarPorTituloDesc(List<Publicacion> lista) 
+        public List<Publicacion> OrdenarPorTituloDesc(List<Publicacion> lista)
         {
             lista.Sort();
             return lista;
