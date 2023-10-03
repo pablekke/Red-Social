@@ -72,7 +72,10 @@ namespace Aplicacion
                 throw new Exception("La fecha de nacimiento es inválida");
             }
         }
-
+        public override string ToString()
+        {
+            return  base.ToString() + $"\nNombre: {Nombre}\nApellido: {Apellido}\nFecha de Nacimiento: {fNac}";
+        }
         #endregion
 
         #endregion

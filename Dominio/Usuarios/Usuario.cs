@@ -57,7 +57,10 @@ namespace Aplicacion
                 throw new Exception("Contraseña vacía");
             }
         }
-
+        public virtual string ToString()
+        {
+            return $"Email: {Email}\nContraseña: {Pass}\nEsAdmin: {EsAdmin}";
+        }
         #endregion
 
     }

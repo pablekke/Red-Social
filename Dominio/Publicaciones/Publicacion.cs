@@ -133,7 +133,10 @@ namespace Aplicacion
             }
             return ret;
         }
-
+        public override string ToString()
+        {
+            return $"Título: {Titulo}\nContenido: {Contenido}\nPrivacidad: {Privacidad}\nAutor: {Autor.Nombre} {Autor.Apellido}";
+        }
         #endregion
 
     }

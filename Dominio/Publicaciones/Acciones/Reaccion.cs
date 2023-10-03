@@ -36,7 +36,10 @@ namespace Aplicacion
                 
             }
         }
-
+        public override string ToString()
+        {
+            return $"Tipo de reaccion: {TipoReaccion}\nMiembro: {Miembro.Nombre} {Miembro.Apellido}";
+        }
         #endregion
 
     }

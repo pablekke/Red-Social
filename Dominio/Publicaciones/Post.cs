@@ -88,7 +88,10 @@ namespace Aplicacion
 
             return va;
         }
-
+        public override string ToString()
+        {
+            return base.ToString() + $"\nCensurada: {Censurada}";
+        }
         #endregion
     }
 }

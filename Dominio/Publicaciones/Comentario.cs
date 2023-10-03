@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,11 @@ namespace Aplicacion
         public override int CalcularVA()
         {
             return base.CalcularVA();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

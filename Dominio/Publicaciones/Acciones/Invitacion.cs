@@ -46,6 +46,7 @@ namespace Aplicacion
             Solicitante.AddAmigo(Solicitado);
             Solicitado.AddAmigo(Solicitante);
         }
+
         public void Declinar()
         {
             Estado = Estado.rechazada;
@@ -72,6 +73,11 @@ namespace Aplicacion
             {
                 throw new Exception("Miembros iguales");
             }
+        }
+
+        public override string ToString()
+        {
+            return $"Solicitante:{Solicitante.Nombre} {Solicitante.Apellido}\nSolicitado: {Solicitado.Nombre} {Solicitado.Apellido}";
         }
 
         #endregion

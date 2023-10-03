@@ -17,6 +17,10 @@ namespace Aplicacion
         {
             base.EsValido();
         }
+        public override string ToString()
+        {
+            return base.ToString();
+        }
         #endregion
     }
 }
