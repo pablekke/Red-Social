@@ -17,7 +17,7 @@ namespace Aplicacion
 
         #endregion
 
-        #region Constructor
+        #region Constructors
         public Reaccion(TipoReaccion reaccion, Miembro miembro)
         {
             TipoReaccion = reaccion;
@@ -27,7 +27,7 @@ namespace Aplicacion
         {
             
         }
-
+        #endregion
         public void EsValido()
         {
             if (Miembro is null)
@@ -40,7 +40,7 @@ namespace Aplicacion
         {
             return $"Tipo de reaccion: {TipoReaccion}\nMiembro: {Miembro.Nombre} {Miembro.Apellido}";
         }
-        #endregion
+        
 
     }
 }

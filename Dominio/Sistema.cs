@@ -388,7 +388,7 @@ namespace Dominio
         public void Precarga()
         {
             #region Miembros
-            Miembro m1 = new Miembro("Pablo", "Suarez", "pablo.suarez@gmail.com", "pass1", false, new DateTime(2001, 06, 28));
+            Miembro m1 = new Miembro("Pablo", "Suárez", "pablo.suarez@gmail.com", "pass1", false, new DateTime(2001, 06, 28));
             Miembro m2 = new Miembro("María", "García", "maria.garcia@gmail.com", "pass2", false, new DateTime(1985, 12, 10));
             Miembro m3 = new Miembro("Carlos", "López", "carlos.lopez@gmail.com", "pass3", false, new DateTime(1980, 3, 25));
             Miembro m4 = new Miembro("Ana", "Rodríguez", "ana.rodriguez@gmail.com", "pass4", false, new DateTime(1995, 7, 2));
@@ -396,7 +396,7 @@ namespace Dominio
             Miembro m6 = new Miembro("Laura", "Sánchez", "laura.sanchez@gmail.com", "pass6", false, new DateTime(1979, 11, 30));
             Miembro m7 = new Miembro("Pedro", "Ramírez", "pedro.ramirez@gmail.com", "pass7", false, new DateTime(1992, 4, 18));
             Miembro m8 = new Miembro("Isabel", "Torres", "isabel.torres@gmail.com", "pass8", false, new DateTime(1983, 8, 12));
-            Miembro m9 = new Miembro("Alejandro", "Gómez", "alejandro.gomez@gmail.com", "pass9", false, new DateTime(1987, 6, 5));
+            Miembro m9 = new Miembro("Marín", "Gómez", "martin.gomez@gmail.com", "pass9", false, new DateTime(1987, 6, 5));
             Miembro m10 = new Miembro("Carmen", "Herrera", "carmen.herrera@gmail.com", "pass10", false, new DateTime(1998, 2, 15));
 
             AddUsuario(m1);
@@ -412,36 +412,67 @@ namespace Dominio
 
             //Admin
             Admin admin1 = new Admin("gabriel.abalos@gmail.com", "admin1", true);
+            Admin admin2 = new Admin("antonella.martinez@gmail.com", "admin2", true);
 
             AddUsuario(admin1);
             #endregion
 
             #region Invitaciones
             //Amigos
-            Invitacion a1 = new Invitacion(m1, m2);
-            Invitacion a2 = new Invitacion(m1, m3);
-            Invitacion a3 = new Invitacion(m1, m4);
-            Invitacion a4 = new Invitacion(m1, m5);
+            Invitacion a11 = new Invitacion(m1, m2);
+            Invitacion a12 = new Invitacion(m1, m3);
+            Invitacion a13 = new Invitacion(m1, m4);
+            Invitacion a14 = new Invitacion(m1, m5);
+            Invitacion a15 = new Invitacion(m1, m6);
+            Invitacion a16 = new Invitacion(m1, m7);
+            Invitacion a17 = new Invitacion(m1, m8);
+            Invitacion a18 = new Invitacion(m1, m9);
+            Invitacion a19 = new Invitacion(m1, m10);
 
-            Invitacion a5 = new Invitacion(m2, m3);
-            Invitacion a6 = new Invitacion(m2, m4);
-            Invitacion a7 = new Invitacion(m2, m5);
+            Invitacion a21 = new Invitacion(m2, m3);
+            Invitacion a22 = new Invitacion(m2, m4);
+            Invitacion a23 = new Invitacion(m2, m5);
+            Invitacion a24 = new Invitacion(m2, m6);
+            Invitacion a25 = new Invitacion(m2, m7);
+            Invitacion a26 = new Invitacion(m2, m8);
+            Invitacion a27 = new Invitacion(m2, m9);
 
-            EnviarInvitacion(a1);
-            EnviarInvitacion(a2);
-            EnviarInvitacion(a3);
-            EnviarInvitacion(a4);
-            EnviarInvitacion(a5);
-            EnviarInvitacion(a6);
-            EnviarInvitacion(a7);
 
-            AceptarInvitacion(a1);
-            AceptarInvitacion(a2);
-            AceptarInvitacion(a3);
-            AceptarInvitacion(a4);
-            AceptarInvitacion(a5);
-            AceptarInvitacion(a6);
-            AceptarInvitacion(a7);
+            EnviarInvitacion(a11);
+            EnviarInvitacion(a12);
+            EnviarInvitacion(a13);
+            EnviarInvitacion(a14);
+            EnviarInvitacion(a15);
+            EnviarInvitacion(a16);
+            EnviarInvitacion(a17);
+            EnviarInvitacion(a18);
+            EnviarInvitacion(a19);
+
+            AceptarInvitacion(a11);
+            AceptarInvitacion(a12);
+            AceptarInvitacion(a13);
+            AceptarInvitacion(a14);
+            AceptarInvitacion(a15);
+            AceptarInvitacion(a16);
+            AceptarInvitacion(a17);
+            AceptarInvitacion(a18);
+            AceptarInvitacion(a19);
+
+            EnviarInvitacion(a21);
+            EnviarInvitacion(a22);
+            EnviarInvitacion(a23);
+            EnviarInvitacion(a24);
+            EnviarInvitacion(a25);
+            EnviarInvitacion(a26);
+            EnviarInvitacion(a27);
+
+            AceptarInvitacion(a21);
+            AceptarInvitacion(a22);
+            AceptarInvitacion(a23);
+            AceptarInvitacion(a24);
+            AceptarInvitacion(a25);
+            AceptarInvitacion(a26);
+            AceptarInvitacion(a27);
 
             //Pendientes
             Invitacion pend1 = new Invitacion(m3, m4);
@@ -462,26 +493,26 @@ namespace Dominio
             #endregion
 
             #region Publicaciones
-            Post post1 = new Post("Cocina", "10 mejores recetas", "tortilla.jpg", Privacidad.publica, m1);
+            Post post1 = new Post("Cocina", "10 mejores recetas.", "cocina.jpg", Privacidad.publica, m1);
             AddPost(post1);
 
-            Post post2 = new Post("Viajes", "Mis viajes por todo el mundo.", "vacaciones.jpg", Privacidad.publica, m2);
+            Post post2 = new Post("Viajes", "Mis viajes por todo el mundo.", "vacaciones.jpg", Privacidad.publica, m3);
             AddPost(post2);
 
-            Post post3 = new Post("Música", "Descubriendo nuevos géneros musicales.", "musica.png", Privacidad.publica, m3);
+            Post post3 = new Post("Música", "Descubriendo nuevos géneros musicales.", "musica.png", Privacidad.publica, m5);
             AddPost(post3);
 
 
-            Post post4 = new Post("Deportes", "Mis logros deportivos y entrenamientos.", "deportes.png", Privacidad.publica, m4);
+            Post post4 = new Post("Deportes", "Mis logros deportivos y entrenamientos.", "deportes.png", Privacidad.publica, m7);
             AddPost(post4);
 
-            Post post5 = new Post("Libros", "Mis reseñas de los últimos libros que he leído.", "libros.jpg", Privacidad.publica, m5);
+            Post post5 = new Post("Libros", "Mis reseñas de los últimos libros que he leído.", "libros.jpg", Privacidad.publica, m1);
             AddPost(post5);
 
             // Comentarios para el post1
             Comentario c1 = new Comentario("¡Me encanta esta receta!", "La probaré en casa.", Privacidad.publica, m2);
             Comentario c2 = new Comentario("Gracias por compartir", "Se ve deliciosa.", Privacidad.publica, m3);
-            Comentario c3 = new Comentario("¡Excelente receta!", "Me recordó a mi abuela.", Privacidad.publica, m4);
+            Comentario c3 = new Comentario("¡Excelente receta!", "Es mi nuevo plato favorito.", Privacidad.publica, m4);
             AddComentario(c1, post1);
             AddComentario(c2, post1);
             AddComentario(c3, post1);
@@ -496,7 +527,7 @@ namespace Dominio
 
             // Comentarios para el post3
             Comentario c7 = new Comentario("Buena selección musical", "También soy fan de ese género.", Privacidad.publica, m1);
-            Comentario c8 = new Comentario("Me gustaría escuchar más", "¿Tienes alguna lista de reproducción recomendada?", Privacidad.publica, m2);
+            Comentario c8 = new Comentario("Me gustaría escuchar más", "¿Tienes alguna playlist recomendada?", Privacidad.publica, m2);
             Comentario c9 = new Comentario("Gran elección", "La música siempre es una buena compañía.", Privacidad.publica, m4);
             AddComentario(c7, post3);
             AddComentario(c8, post3);
@@ -504,8 +535,8 @@ namespace Dominio
 
             // Comentarios para el post4
             Comentario c10 = new Comentario("¡Eres un atleta impresionante!", "¿Cuál es tu deporte favorito?", Privacidad.publica, m1);
-            Comentario c11 = new Comentario("Sigue así", "El esfuerzo siempre da sus frutos.", Privacidad.publica, m2);
-            Comentario c12 = new Comentario("¡Vamos!", "¡Motivación para entrenar hoy!", Privacidad.publica, m3);
+            Comentario c11 = new Comentario("Sigue así", "El esfuerzo siempre da sus frutos.", Privacidad.publica, m7);
+            Comentario c12 = new Comentario("¡Vamos!", "¡Motivación para entrenar hoy!", Privacidad.publica, m10);
             AddComentario(c10, post4);
             AddComentario(c11, post4);
             AddComentario(c12, post4);
@@ -513,7 +544,7 @@ namespace Dominio
             // Comentarios para el post5
             Comentario c13 = new Comentario("Excelentes reseñas", "¿Tienes alguna recomendación de libros recientes?", Privacidad.publica, m2);
             Comentario c14 = new Comentario("Me encanta leer", "Siempre es bueno compartir opiniones sobre libros.", Privacidad.publica, m4);
-            Comentario c15 = new Comentario("¡Gracias por las reseñas!", "Estoy buscando nuevas lecturas.", Privacidad.publica, m5);
+            Comentario c15 = new Comentario("¡Gracias por las reseñas!", "Estoy buscando nuevas lecturas.", Privacidad.publica, m9);
             AddComentario(c13, post5);
             AddComentario(c14, post5);
             AddComentario(c15, post5);

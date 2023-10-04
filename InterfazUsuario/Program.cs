@@ -58,8 +58,7 @@ namespace InterfazUsuario
                         string pass = Console.ReadLine();
                         try
                         {
-
-                            Miembro nuevoMiembro = new Miembro(nombre, apellido, email, pass, false, datetimeValido); /*fechaDT);*/
+                            Miembro nuevoMiembro = new Miembro(nombre, apellido, email, pass, false, datetimeValido);
 
                             S.AddUsuario(nuevoMiembro);
 
