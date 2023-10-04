@@ -37,7 +37,7 @@ namespace InterfazUsuario
                         DateTime fechaDT = DateTime.Now;
                         while (!fechaValida)
                         {
-                            Console.Write("Ingrese la fecha de nacimiento del nuevo miembro (yyyy-MM-dd): ");
+                            Console.Write("Ingrese la fecha de nacimiento del nuevo miembro (yyyy/MM/dd): ");
                             string fNac = Console.ReadLine();
 
                             try
@@ -45,9 +45,10 @@ namespace InterfazUsuario
                                 fechaDT = DateTime.Parse(fNac);
                                 fechaValida = true;
                             }
-                            catch (FormatException)
+                            catch (Exception e)
                             {
-                                Console.WriteLine("Fecha incorrecta. Aseguráte de que la fecha esté en el formato yyyy-MM-dd.");
+                                Console.WriteLine("Fecha incorrecta. Aseguráte de que la fecha esté en el formato yyyy/MM/dd.");
+                                Console.WriteLine(e.Message);
                             }
                         }
 
@@ -58,13 +59,11 @@ namespace InterfazUsuario
                         string pass = Console.ReadLine();
                         try
                         {
-
-                            Miembro nuevoMiembro = new Miembro(nombre, apellido, email, pass, false, datetimeValido); /*fechaDT);*/
+                            Miembro nuevoMiembro = new Miembro(nombre, apellido, email, pass, false, fechaDT);
 
                             S.AddUsuario(nuevoMiembro);
 
                             Console.WriteLine("Miembro dado de alta con éxito.");
-
                         }
                         catch (Exception ex)
                         {

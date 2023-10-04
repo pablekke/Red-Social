@@ -71,6 +71,7 @@ namespace Aplicacion
             {
                 throw new Exception("La fecha de nacimiento es inválida");
             }
+
         }
         public override string ToString()
         {
