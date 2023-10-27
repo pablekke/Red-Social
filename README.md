@@ -49,7 +49,7 @@ Invitaciones para todos los miembros: donde 2 de ellos tengan al menos un víncu
 Reacciones para al menos 2 post, y para al menos 2 comentarios. 
        
 
-      3. Desplegar un menú en consola que permita:
+3. Desplegar un menú en consola que permita:
 Alta de miembro. Recuerde verificar que se cumplan las reglas mencionadas en la realidad planteada.
 Dado un email de miembro listar todas las publicaciones que ha realizado, diferenciando en la lista su tipo (si es post o comentario).
 Dado un email de miembro, listar los posts en los que haya realizado comentarios. Se listarán solamente los posts, no se incluirán los comentarios.
