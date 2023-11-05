@@ -1,0 +1,42 @@
+html {
+    position: relative;
+    min-height: 100%;
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.my-12 {
+    margin-top:12%;
+    margin-bottom:12%
+}
+
+.btnLogin {
+    width: 100%;
+    backdrop-filter: blur(10px);
+    background-color: floralwhite;
+    border-radius: 10px;
+    margin: 5%;
+}
+.btnLogin:hover {
+    background-color: #bababa;
+    border-color: #bababa;
+    transform :scale(1.01)
+}
+
+.pLogin {
+    width:100%
+}
