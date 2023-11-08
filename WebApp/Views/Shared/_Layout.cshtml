@@ -29,7 +29,7 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Mis publicaciones</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Login"><span id="LogReg">Register/Login</span></a>
+                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Login">Register/Login</a>
                         </li>
                     </ul>
                 </div>
@@ -44,13 +44,14 @@
     </div>
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - WebApp - <a class="" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - MoonBlur - <a class="" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer> 
+    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/login.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
