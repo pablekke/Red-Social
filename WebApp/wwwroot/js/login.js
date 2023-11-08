@@ -9,3 +9,14 @@ signUpButton.addEventListener('click', () => {
 signInButton.addEventListener('click', () => {
 	container.classList.remove("right-panel-active");
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const registroForm = document.getElementById("registroForm");
+
+    registroForm.addEventListener("submit", (event) => {
+        if (!formIsValid) {
+            event.preventDefault();
+        }
+    });
+});

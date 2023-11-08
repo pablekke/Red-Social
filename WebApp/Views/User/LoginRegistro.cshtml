@@ -1,0 +1,72 @@
+﻿@model Aplicacion.Miembro
+
+@{
+    ViewData["Title"] = "Sé el astro que resalte";
+    // Obtenemos la fecha actual en formato ISO (yyyy-MM-dd)
+    var fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+}
+
+<div class="asBody">
+
+    <h1 id="h1Login">✨Sé la estrella más brillante en tu constelación✨</h1>
+    <div class="containerLogin" id="containerLogin">
+        <div class="form-container sign-up-container">
+            <form method="post" id="registroForm" asp-action="RegistrarMiembro">
+                <h2>Crear cuenta</h2>
+                <span>o regístrate con tu correo electrónico</span>
+                <input asp-for="Nombre" type="text" placeholder="Nombre" required />
+                <input asp-for="Apellido" type="text" placeholder="Apellido" required />
+                <input asp-for="Email" type="email" placeholder="Email" required />
+                <input asp-for="Pass" type="password" placeholder="Contraseña" required>
+                <input asp-for="fNac" type="date" min="1920-01-01" max="@fechaHoy" required>
+                <button type="submit">Registrarse</button>
+            </form>
+            @if (ViewBag.msg == "Felicidades, ya sos parte de nuestro universo 💫\t")
+            {
+
+                <p class="text-info"> @ViewBag.msg </p>
+
+            }
+            else
+            {
+
+                <p class="text-danger"> @ViewBag.msg </p>
+
+            }
+
+        </div>
+
+        <div class="form-container sign-in-container">
+            <form method="post" id="loginForm" asp-action="Login">
+                <h2>Ingresar</h2>
+                @*
+                <div class="social-container">
+                <a href="#" class="social aLogin"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social aLogin"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social aLogin"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                *@
+                <span>o usa tu cuenta</span>
+                <input asp-for="Email" type="email" placeholder="Email" required />
+                <input asp-for="Pass" type="password" placeholder="Contraseña" required />
+                @* <a href="#">¿Olvidaste tu contraseña?</a> *@
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h3>Bienvenido de nuevo</h3>
+                    <p>Para mantenerte en nuestra galaxia, inicia sesión con tus datos</p>
+                    <button class="ghost" id="signIn">Ingresar</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h3>Hola viajero!</h3>
+                    <p>Sé parte de nuestro universo registrándote</p>
+                    <button class="ghost" id="signUp">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

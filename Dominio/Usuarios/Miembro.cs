@@ -73,6 +73,7 @@ namespace Aplicacion
             }
 
         }
+
         public override string ToString()
         {
             return  base.ToString() + $"\nNombre: {Nombre}\nApellido: {Apellido}\nFecha de Nacimiento: {fNac}";

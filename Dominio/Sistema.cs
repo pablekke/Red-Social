@@ -196,6 +196,40 @@ namespace Dominio
 
         #endregion
 
+        #region Login
+        public Usuario? Login(string email, string pass)
+        {
+            Usuario? usuario = null;
+
+            foreach (var u in _usuarios)
+            {
+                if (u.Email == email && u.Pass == pass)
+                {
+                    usuario = u;
+                    break;
+                }
+            }
+
+            return usuario;
+        }
+
+        public bool ExisteEmail(string email)
+        {
+            bool existe = false;
+            foreach (var u in _usuarios)
+            {
+                if (u.Email == email)
+                {
+                    existe = true;
+                    break;
+                }
+            }
+
+            return existe;
+        }
+
+        #endregion
+
         #region Publications
 
         public void EnviarInvitacion(Invitacion i)

@@ -13,32 +13,41 @@ namespace WebApp.Controllers
             return View();
         }
 
-        #region Login
-        public IActionResult Login(string email, string pass)
-        {
-            /*Usuario u = s.Login(email, pass);*/
+        public IActionResult LoginRegistro() {
+
             return View();
         }
 
+        #region Login
         [HttpPost]
-        public IActionResult LogIn()
+        public IActionResult Login(string email, string pass)
         {
-            return View();
+            Usuario u = s.Login(email, pass);
+
+            return RedirectToAction("Index","Home");
+
         }
         #endregion
 
         #region Registrer
-        public IActionResult Register()
-        {
-            return View();
-        }
 
         [HttpPost]
-        public IActionResult Registrar(Miembro nuevo)
+        public IActionResult RegistrarMiembro(Miembro nuevo)
         {
+            try
+            {
+                s.AddUsuario(nuevo);
 
-            return View();
+                ViewBag.msg = "Felicidades, ya sos parte de nuestro universo 💫\t";
+            }
+            catch (Exception e)
+            {
+                ViewBag.msg = e.Message;
+            }
+
+            return View("LoginRegistro");
         }
+
         #endregion
     }
 
