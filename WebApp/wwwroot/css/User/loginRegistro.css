@@ -4,7 +4,6 @@
     align-items: center;
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
-    
 }
 
     /* Ajusta el ancho máximo de contenido dentro de .asBody */
@@ -21,9 +20,11 @@
 h1 {
     text-align: center;
 }
+
 #h1Login {
-    margin:4% auto 1% auto;
+    margin: 4% auto 1% auto;
 }
+
 h2 {
     font-weight: bold;
     margin: 0;
@@ -96,6 +97,7 @@ input {
     margin: 8px 0;
     width: 100%;
 }
+
 .containerLogin {
     background-color: #fff;
     border-radius: 10px;
@@ -170,7 +172,7 @@ input {
     background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
     background: linear-gradient(to right, #FF4B2B, #FF416C);*/
     background-color: #FFFFFF;
-    background-image: url("../img/pexels-aleksandar-pasaric-4537858.svg");
+    background-image: url('../../img/User/RegisterBackground.svg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;

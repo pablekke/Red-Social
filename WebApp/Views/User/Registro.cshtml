@@ -1,0 +1,54 @@
+﻿@model Aplicacion.Miembro
+
+@{
+    ViewData["Title"] = "Sé el astro que resalte";
+    // Obtenemos la fecha actual en formato ISO (yyyy-MM-dd)
+    var fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+}
+
+<div class="asBody">
+    <h1 id="h1Login">✨Sé la estrella más brillante en tu constelación✨</h1>
+    <div class="containerLogin">
+        <div class="form-container sign-in-container">
+            <form method="post" id="registroForm" asp-action="Registro">
+                <h2>Crear cuenta</h2>
+                <span>o regístrate con tu correo electrónico</span>
+
+                <input asp-for="Nombre" id="nombre" type="text" placeholder="Nombre" required />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+
+                <input asp-for="Apellido" id="apellido" type="text" placeholder="Apellido" required />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+
+                <input asp-for="Email" id="email" type="email" placeholder="Email" required />
+                <span asp-validation-for="Email" class="text-danger"></span>
+
+                <input asp-for="Pass" id="pass" type="password" placeholder="Contraseña" required>
+                <span asp-validation-for="Pass" class="text-black text-danger"></span>
+
+                <input asp-for="fNac" id="fNac" type="date" class="form-control" min="1920-01-01" max="@fechaHoy" required>
+
+                <button type="submit" class="btn btn-secondary btn-sm m-1">Registrarse</button>
+
+                <h4 class="text-danger"> @ViewBag.msg </h4>
+            </form>
+
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-right">
+                    <h3>Bienvenido de nuevo</h3>
+                    <p>Para mantenerte en nuestra galaxia, inicia sesión con tus datos</p>
+                    <a href="/User/Login" class="btn btn-dark ghost rounded" role="button">Iniciar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/User/Registro.js"></script>
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/User/loginRegistro.css" asp-append-version="true" />
+}

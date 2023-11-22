@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Aplicacion.Publicacion>
+
+@if (Model.Count() != 0)
+{
+    <div class="container">
+        <form method="post" class="container-fluid text-center">
+            <h2>Buscar post:</h2>
+            <input type="number" name="VA" placeholder="Ingresá un VA" /> <br />
+            <input type="text" name="criterio" placeholder="Ingresá una palabra" />
+
+            <button type="submit" class=" mb-1">🔎</button>
+        </form>
+    </div>
+    <div class="container">
+        @foreach (var p in Model)
+        {
+            if (p is Aplicacion.Post)
+            {
+                var post = p as Aplicacion.Post;
+                <div class="container-fluid text-center">
+                    <div class="mx-auto">
+                        <h3><strong class="text-info">Publicacion: </strong> @p.Autor.Nombre @p.Autor.Apellido - @p.Titulo</h3>
+
+                        <img src="/img/User/Posts/@post.Img" alt="@post.Img" class="img-fluid imgPost">
+                        <p>@p.Contenido</p>
+
+                        @Html.ActionLink("👍 " + p.CalcularCdadReacciones(Aplicacion.TipoReaccion.like) , "DarLike", "Publicacion", new { id = p.Id }, new { @class = "btn btn-secondary btn-lg like-btn" })
+
+                        @Html.ActionLink("👎 " + p.CalcularCdadReacciones(Aplicacion.TipoReaccion.dislike),"DarDisLike","Publicacion", new{id=p.Id}, new {@class = "btn btn-secondary btn-lg"})
+                        <p>Valor de aceptación: @p.CalcularVA()</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                var comentario = p as Aplicacion.Comentario;
+
+                <div class="container-fluid text-center bg-secondary">
+                    <div class="mx-auto">
+                        <h3 class="text-white"><strong class="text-white-50">Comentario: </strong> @comentario.Autor.Nombre @p.Autor.Apellido - @p.Titulo</h3>
+                        <p>@p.Contenido</p>
+
+                        @Html.ActionLink("👍 " + p.CalcularCdadReacciones(Aplicacion.TipoReaccion.like) , "DarLike", "Publicacion", new { id = p.Id }, new { @class = "btn btn-secondary btn-lg like-btn" })
+
+                        @Html.ActionLink("👎 " + p.CalcularCdadReacciones(Aplicacion.TipoReaccion.dislike),"DarDisLike","Publicacion", new{id=p.Id}, new {@class = "btn btn-secondary btn-lg"})
+                        <p>Valor de aceptación: @p.CalcularVA()</p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+else
+{
+    <div class="container-fluid vw-100 d-flex justify-content-center align-items-center">
+        <h1 class="container-lg text-center d-block">
+            Parece que no hay coincidencias con tus criterios de búsqueda :/
+        </h1>
+        <h2 class="container-lg text-center d-block"> <a href="../Publicacion" class="text-decoration-none text-dark">Volver al inicio</a></h2>
+    </div>
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/Publicaciones/Index.css" asp-append-version="true" />
+    }
+@section Scripts{
+
+    <script>
+        $(document).scroll(function () {
+            localStorage['page'] = document.URL;
+            localStorage['scrollTop'] = $(document).scrollTop();
+        });
+
+        $(document).ready(function () {
+            if (localStorage['page'] == document.URL) {
+                $(document).scrollTop(localStorage['scrollTop']);
+            }
+        });
+
+    </script>
+    }
+

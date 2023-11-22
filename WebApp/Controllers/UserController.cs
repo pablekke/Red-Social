@@ -1,6 +1,7 @@
 ﻿using Aplicacion;
 using Dominio;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace WebApp.Controllers
 {
@@ -8,47 +9,176 @@ namespace WebApp.Controllers
     {
         Sistema s = Sistema.GetInstancia();
 
+        private bool checkboxPrivacidad;
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult LoginRegistro() {
-
-            return View();
+        #region People
+        public IActionResult Personas()
+        {
+            int? lid = HttpContext.Session.GetInt32("LogueadoId");
+            if (lid == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View(s.BuscarMiembros("", lid));
         }
 
-        #region Login
         [HttpPost]
-        public IActionResult Login(string email, string pass)
+        public IActionResult Personas(string criterio)
         {
-            Usuario u = s.Login(email, pass);
+            int? lid = HttpContext.Session.GetInt32("LogueadoId");
+            if (lid == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
-            return RedirectToAction("Index","Home");
+            if (String.IsNullOrEmpty(criterio))
+            {
+                return View(s.GetMiembros());
+            }
 
+            return View(s.BuscarMiembros(criterio, lid));
+        }
+
+        public IActionResult SolicitudesPendientes()
+        {
+            int? lid = HttpContext.Session.GetInt32("LogueadoId");
+            if (lid == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View(s.GetSolicitudesPendientes(lid));
+        }
+
+        [HttpPost]
+        public IActionResult AñadirAmigo(int id)
+        {
+            int? lid = HttpContext.Session.GetInt32("LogueadoId");
+            try
+            {
+                if (!s.ExisteInvitaciónRechazada(lid, id)) { 
+                    Invitacion i = new Invitacion(s.MiembroById(lid), s.MiembroById(id));
+                    s.EnviarInvitacion(i);
+                }
+                else
+                {
+                    s.GetSolicitudByIdDeMiembro(lid).Estado = Estado.pendiente;
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+            }
+            return RedirectToAction("Personas", "User");
+        }
+
+        [HttpPost]
+        public IActionResult AceptarSolicitud(int id)
+        {
+            Invitacion? i = s.GetSolicitudById(id);
+            try
+            {
+                s.AceptarInvitacion(i);
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.ToString();
+            }
+            return RedirectToAction("SolicitudesPendientes", "User");
+        }
+
+        [HttpPost]
+        public IActionResult RechazarSolicitud(int id)
+        {
+            Invitacion? i = s.GetSolicitudById(id);
+            try
+            {
+                s.DeclinarInvitacion(i);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+            }
+            return RedirectToAction("SolicitudesPendientes", "User");
         }
         #endregion
 
         #region Registrer
+        public IActionResult Registro()
+        {
+            return View();
+        }
 
         [HttpPost]
-        public IActionResult RegistrarMiembro(Miembro nuevo)
+        public IActionResult Registro(Miembro nuevo)
         {
             try
             {
                 s.AddUsuario(nuevo);
 
-                ViewBag.msg = "Felicidades, ya sos parte de nuestro universo 💫\t";
+                Login(nuevo.Email, nuevo.Pass);
+                return RedirectToAction("Index", "Publicacion");
             }
             catch (Exception e)
             {
                 ViewBag.msg = e.Message;
+                return View();
             }
 
-            return View("LoginRegistro");
+        }
+        #endregion
+
+        #region Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(string email, string pass)
+        {
+            Usuario? u = s.Login(email, pass);
+
+            if (u != null)
+            {
+                HttpContext.Session.SetInt32("LogueadoId", u.Id);
+
+                HttpContext.Session.SetString("LogueadoNombreApellido", u.Nombre + " " + u.Apellido);
+                HttpContext.Session.SetString("LogueadoRol", u.GetType().Name);
+
+                if (u is Miembro aux)
+                {
+                    HttpContext.Session.SetString("LogueadoFnac", aux.fNac.ToString());
+                    return RedirectToAction("Index", "Publicacion");
+                }
+                else {
+                    return RedirectToAction("BuscarPublicaciones", "Publicacion");
+                }
+
+            }
+            else
+            {
+                ViewBag.msg = "Usuario y/o contraseña incorrectos";
+                return View();
+            }
         }
 
         #endregion
+
+        #region Log Out
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion
+
+
     }
 
 }

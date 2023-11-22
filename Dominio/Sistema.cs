@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,29 +53,42 @@ namespace Dominio
             return _usuarios;
         }
 
-        public List<Publicacion> GetAllPosts()
+        public List<Miembro> GetMiembros()
         {
-            List<Publicacion> posts = new List<Publicacion>();
+            List<Miembro> ret = new List<Miembro>();
+            foreach (var u in _usuarios)
+            {
+                if (u is Miembro uu)
+                {
+                    ret.Add(uu);
+                }
+            }
+            return ret;
+        }
 
-            foreach (Publicacion p in _publicaciones)
+        public List<Post> GetAllPosts(List<Publicacion> listPub)
+        {
+            List<Post> posts = new List<Post>();
+
+            foreach (Publicacion p in listPub)
             {
                 if (p is Post)
                 {
-                    posts.Add(p);
+                    posts.Add((Post)p);
                 }
             }
 
             return posts;
         }
 
-        public List<Publicacion> GetAllComentarios()
+        public List<Comentario> GetAllComentarios()
         {
-            List<Publicacion> comentarios = new List<Publicacion>();
+            List<Comentario> comentarios = new List<Comentario>();
             foreach (Publicacion c in _publicaciones)
             {
                 if (c is Comentario)
                 {
-                    comentarios.Add(c);
+                    comentarios.Add((Comentario)c);
                 }
             }
 
@@ -90,7 +104,47 @@ namespace Dominio
         {
             return _invitaciones;
         }
+        public List<Invitacion> GetSolicitudesPendientes(int? id)
+        {
+            List<Invitacion> pends = new List<Invitacion>();
+            Miembro? m = MiembroById(id);
+            foreach (var i in _invitaciones)
+            {
+                if (i.Solicitado == m && i.Estado == Estado.pendiente)
+                {
+                    pends.Add(i);
+                }
+            }
+            return pends;
+        }
+        public Invitacion GetSolicitudById(int? idSolicitud)
+        {
+            Invitacion? inv = null;
 
+            foreach (var i in _invitaciones)
+            {
+                if (i.Id == idSolicitud)
+                {
+                    inv = i;
+                    break;
+                }
+            }
+            return inv;
+        }
+        public Invitacion GetSolicitudByIdDeMiembro(int? idMiembro)
+        {
+            Invitacion? inv = null;
+
+            foreach (Invitacion i in _invitaciones)
+            {
+                if (i.Solicitante.Id == idMiembro || i.Solicitado.Id == idMiembro)
+                {
+                    inv = i;
+                    break;
+                }
+            }
+            return inv;
+        }
         #endregion
 
         #region Add Methods
@@ -102,9 +156,14 @@ namespace Dominio
                 throw new Exception("Usuario vacío.");
             }
             u.EsValido();
+            if (ExisteEmail(u.Email))
+            {
+                throw new Exception("Ese email ya fue registrado.");
+            }
             _usuarios.Add(u);
 
         }
+
 
         public void AddPost(Post p)
         {
@@ -232,6 +291,54 @@ namespace Dominio
 
         #region Publications
 
+        public Publicacion GetPublicacionById(int publicacionId)
+        {
+            Publicacion p = null;
+
+            foreach (var publicacion in _publicaciones)
+            {
+                if (publicacion.Id == publicacionId)
+                {
+                    p = publicacion;
+                    break;
+                }
+            }
+
+            return p;
+        }
+
+        public Post GetPostById(int postId)
+        {
+            Post p = null;
+
+            foreach (var post in GetAllPosts(_publicaciones))
+            {
+                if (post.Id == postId)
+                {
+                    p = post;
+                    break;
+                }
+            }
+
+            return p;
+        }
+
+        public Comentario GetCommentById(int commentId)
+        {
+            Comentario c = null;
+
+            foreach (var comment in GetAllComentarios())
+            {
+                if (comment.Id == commentId)
+                {
+                    c = comment;
+                    break;
+                }
+            }
+
+            return c;
+        }
+
         public void EnviarInvitacion(Invitacion i)
         {
             if (i is null)
@@ -310,7 +417,7 @@ namespace Dominio
         {
             List<Publicacion> ret = new List<Publicacion>();
 
-            foreach (Post p in GetAllPosts())
+            foreach (Post p in GetAllPosts(_publicaciones))
             {
                 List<Comentario> coms = p.GetComentarios();
 
@@ -345,17 +452,17 @@ namespace Dominio
 
             List<Publicacion> pub = new List<Publicacion>();
 
-            foreach (Post p in GetAllPosts())
+            foreach (Post p in GetAllPosts(_publicaciones))
             {
                 if (p.fPublicado < fFin && p.fPublicado > fInicio)
                 {
                     pub.Add(p);
                 }
-
             }
 
             return pub;
         }
+
         public List<Usuario> ObtenerMiembrosConMasPublicaciones()
         {
             List<Usuario> ret = new List<Usuario>();
@@ -396,6 +503,89 @@ namespace Dominio
 
         #region Users
 
+        public List<Miembro> BuscarMiembros(string criterio, int? idLogueado)
+        {
+            List<Miembro> ret = new List<Miembro>();
+            foreach (var m in GetMiembros())
+            {
+                string nombre = m.Nombre.ToLower();
+                criterio = criterio.ToLower();
+                if (nombre.Contains(criterio) && m.Id != idLogueado)
+                {
+                    ret.Add(m);
+                }
+            }
+            return ret;
+        }
+
+        public Miembro? MiembroById(int? id)
+        {
+            Miembro? m = null;
+            foreach (var miembro in GetMiembros())
+            {
+                if (miembro.Id == id)
+                {
+                    m = miembro;
+                    break;
+                }
+            }
+            return m;
+
+        }
+
+        public bool SonAmigos(int? id1, int? id2)
+        {
+            bool sonAmigos = false;
+            Miembro? m1 = MiembroById(id1);
+            Miembro? m2 = MiembroById(id2);
+            if (m1.GetAmigos().Contains(m2))
+            {
+                sonAmigos = true;
+            }
+            return sonAmigos;
+        }
+
+        public bool ExisteInvitaciónPendiente(int? idSolicitante, int? idSolicitado)
+        {
+            bool existe = false;
+            Miembro? m1 = MiembroById(idSolicitante);
+            Miembro? m2 = MiembroById(idSolicitado);
+            foreach (var i in _invitaciones)
+            {
+                if (
+                    i.Solicitante.Id == idSolicitante && i.Solicitado.Id == idSolicitado &&
+                    i.Estado == Estado.pendiente
+                    )
+                {
+
+                    existe = true;
+                    break;
+                }
+            }
+            return existe;
+        }
+
+        public bool ExisteInvitaciónRechazada(int? id1, int? id2)
+        {
+            bool existe = false;
+            Miembro? m1 = MiembroById(id1);
+            Miembro? m2 = MiembroById(id2);
+            foreach (var i in _invitaciones)
+            {
+                if (
+                    (i.Solicitado.Id == id1 && i.Solicitante.Id == id2 ||
+                     i.Solicitante.Id == id1 && i.Solicitado.Id == id2) &&
+                     i.Estado == Estado.rechazada
+                    )
+                {
+                    existe = true;
+                    break;
+                }
+            }
+            return existe;
+        }
+
+
         public void Bloquear(Usuario u)
         {
             if (u is null)
@@ -424,14 +614,15 @@ namespace Dominio
             #region Miembros
             Miembro m1 = new Miembro("Pablo", "Suárez", "pablo.suarez@gmail.com", "pass1", false, new DateTime(2001, 06, 28));
             Miembro m2 = new Miembro("María", "García", "maria.garcia@gmail.com", "pass2", false, new DateTime(1985, 12, 10));
-            Miembro m3 = new Miembro("Carlos", "López", "carlos.lopez@gmail.com", "pass3", false, new DateTime(1980, 3, 25));
+            Miembro m3 = new Miembro("José María", "López", "joseMa.lopez@gmail.com", "pass3", false, new DateTime(1980, 3, 25));
             Miembro m4 = new Miembro("Ana", "Rodríguez", "ana.rodriguez@gmail.com", "pass4", false, new DateTime(1995, 7, 2));
             Miembro m5 = new Miembro("Luis", "Martínez", "luis.martinez@gmail.com", "pass5", false, new DateTime(1988, 9, 20));
             Miembro m6 = new Miembro("Laura", "Sánchez", "laura.sanchez@gmail.com", "pass6", false, new DateTime(1979, 11, 30));
-            Miembro m7 = new Miembro("Pedro", "Ramírez", "pedro.ramirez@gmail.com", "pass7", false, new DateTime(1992, 4, 18));
+            Miembro m7 = new Miembro("Cristiano", "Ronaldo", "cristiano.ronaldo@gmail.com", "pass7", false, new DateTime(1992, 4, 18));
             Miembro m8 = new Miembro("Isabel", "Torres", "isabel.torres@gmail.com", "pass8", false, new DateTime(1983, 8, 12));
             Miembro m9 = new Miembro("Marín", "Gómez", "martin.gomez@gmail.com", "pass9", false, new DateTime(1987, 6, 5));
             Miembro m10 = new Miembro("Carmen", "Herrera", "carmen.herrera@gmail.com", "pass10", false, new DateTime(1998, 2, 15));
+            Miembro m11 = new Miembro("Carla", "Gimenez", "carla.gimenez@gmail.com", "pass11", false, new DateTime(2000, 7, 15));
 
             AddUsuario(m1);
             AddUsuario(m2);
@@ -443,10 +634,11 @@ namespace Dominio
             AddUsuario(m8);
             AddUsuario(m9);
             AddUsuario(m10);
+            AddUsuario(m11);
 
             //Admin
-            Admin admin1 = new Admin("gabriel.abalos@gmail.com", "admin1", true);
-            Admin admin2 = new Admin("antonella.martinez@gmail.com", "admin2", true);
+            Admin admin1 = new Admin("Gabriel", "Abalos", "gabriel.abalos@gmail.com", "admin1", true);
+            Admin admin2 = new Admin("Antonella", "Martinez", "antonella.martinez@gmail.com", "admin2", true);
 
             AddUsuario(admin1);
             #endregion
@@ -511,9 +703,11 @@ namespace Dominio
             //Pendientes
             Invitacion pend1 = new Invitacion(m3, m4);
             Invitacion pend2 = new Invitacion(m5, m6);
+            Invitacion pend3 = new Invitacion(m11, m1);
 
             EnviarInvitacion(pend1);
             EnviarInvitacion(pend2);
+            EnviarInvitacion(pend3);
 
             //Declinados
             Invitacion rechazada1 = new Invitacion(m7, m8);
@@ -533,11 +727,10 @@ namespace Dominio
             Post post2 = new Post("Viajes", "Mis viajes por todo el mundo.", "vacaciones.jpg", Privacidad.publica, m3);
             AddPost(post2);
 
-            Post post3 = new Post("Música", "Descubriendo nuevos géneros musicales.", "musica.png", Privacidad.publica, m5);
+            Post post3 = new Post("Música", "Descubriendo nuevos géneros musicales.", "musica.jpg", Privacidad.publica, m5);
             AddPost(post3);
 
-
-            Post post4 = new Post("Deportes", "Mis logros deportivos y entrenamientos.", "deportes.png", Privacidad.publica, m7);
+            Post post4 = new Post("Deportes", "Mis logros deportivos y entrenamientos.", "deportes.jpg", Privacidad.publica, m7);
             AddPost(post4);
 
             Post post5 = new Post("Libros", "Mis reseñas de los últimos libros que he leído.", "libros.jpg", Privacidad.publica, m1);

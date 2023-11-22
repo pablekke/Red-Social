@@ -1,0 +1,55 @@
+﻿@model Aplicacion.Post
+
+@{
+    ViewData["Title"] = "Publicar";
+}
+
+
+<div class="row">
+    <div class="col-md-4 container container-fluid">
+        <h1>Publicar</h1>
+        <h4>Post</h4>
+        <form id="publicarForm" asp-action="Publicar" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Titulo" class="control-label" maxlength="128"></label>
+                <input id="titulo" asp-for="Titulo" class="form-control" required />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Contenido" class="control-label"></label>
+                <textarea id="contenido" asp-for="Contenido" class="form-control" rows="4" cols="20" maxlength="255" style="height: 100px; resize: none;" required></textarea>
+                <span asp-validation-for="Contenido" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Img" class="control-label">Subir Archivo</label>
+                <input id="imagen" name="foto" asp-for="Img" type="file" class="form-control" required accept=".png, .jpg, .jpeg" />
+                <span asp-validation-for="Img" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Privacidad" class="form-check-label">Privado</label>
+                <input id="privacidadCheckbox" type="checkbox" class="form-check-input" />
+                <input type="hidden" id="Privacidad" name="Privacidad" value="Publico" />
+            </div>
+
+            <button type="submit" class="btn btn-secondary btn-sm mt-3">Publicar</button>
+        </form>
+        <h4 id="mensajePublicar"></h4>
+        <h4>@ViewBag.msg</h4>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/User/Publicar.js" asp-append-version="true"></script>
+}
+@* @section Styles {
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+} *@

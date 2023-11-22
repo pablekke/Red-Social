@@ -1,0 +1,45 @@
+﻿@model Aplicacion.Miembro
+
+@{
+    ViewData["Title"] = "Sé el astro que resalte";
+}
+
+<div class="asBody">
+    <h1 id="h1Login">✨Sé la estrella más brillante en tu constelación✨</h1>
+    <div class="containerLogin" id="containerLogin">
+
+        <div class="form-container sign-in-container">
+            <form method="post" id="loginForm" asp-action="Login">
+                <h2>Ingresar</h2>
+                @*
+                <div class="social-container">
+                <a href="#" class="social aLogin"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social aLogin"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social aLogin"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                *@
+                <span>o usa tu cuenta</span>
+                <input asp-for="Email" type="email" placeholder="Email" required value="gabriel.abalos@gmail.com" />
+                <input asp-for="Pass" type="password" placeholder="Contraseña" required value="admin1"/>
+                @* <a href="#">¿Olvidaste tu contraseña?</a> *@
+                <button type="submit" class="btn btn-secondary btn-sm m-1">Ingresar</button>
+                <h4 class="text-danger"> @ViewBag.msg </h4>
+            </form>
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-right">
+                    <h3>Hola viajero!</h3>
+                    <p>¿No tenés cuenta aún?</p>
+                    <p>Sé parte de nuestro universo registrándote</p>
+                    <a href="/User/Registro" class="btn btn-dark ghost rounded" role="button">Registrarse</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/User/loginRegistro.css" asp-append-version="true" />
+}

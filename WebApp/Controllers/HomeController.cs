@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dominio;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebApp.Models;
 
@@ -12,7 +13,6 @@ namespace WebApp.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();

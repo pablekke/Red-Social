@@ -18,23 +18,68 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Mis Amigos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Mis publicaciones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="LoginRegistro">Register/Login</a>
+                    <ul class="navbar-nav flex-grow-1 ml-auto">
+                        @if (Context.Session.GetInt32("LogueadoId") != null && Context.Session.GetString("LogueadoRol") == "Miembro")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Publicacion" asp-action="Index">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Publicacion" asp-action="Publicar">Publicar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="SolicitudesPendientes">Solicitudes pendientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Personas">Buscar Personas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Publicacion" asp-action="BuscarPublicaciones">Buscar Publicaciones</a>
+                            </li>
+                        }
+                        else if (Context.Session.GetString("LogueadoRol") == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Personas">Buscar Personas</a>
+                            </li>
+
+                        } else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                            </li>
+                        }
+
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        @if (Context.Session.GetInt32("LogueadoId") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Logout">Cerrar sesión</a>
+                            </li>
+                        } else {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Login">Iniciar sesión</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Registro">Registrarse</a>
+                            </li>
+                        }
+                        <li class="nav-item mr-auto">
                         </li>
                     </ul>
+                    <button id="dark-mode-toggle" class="btn btn-dark">🌙</button>
                 </div>
-                <button id="dark-mode-toggle" class="btn btn-dark ml-auto">🌙</button>
             </div>
+
+            @*                 <div class="navbar-collapse collapse d-sm-inline-flex">
+            <ul class="navbar-nav flex-grow-1">
+
+            <li></li>
+            </ul>
+             *@
         </nav>
     </header>
     <div class="row">
@@ -51,7 +96,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/login.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Styles", required: false)
 </body>
 </html>

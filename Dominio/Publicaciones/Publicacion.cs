@@ -43,6 +43,7 @@ namespace Aplicacion
         public Publicacion()
         {
             Id = _ultimoId++;
+            fPublicado = DateTime.Now;
         }
 
         #endregion
@@ -119,6 +120,18 @@ namespace Aplicacion
             return likes + dislikes;
         }
 
+        public virtual int CalcularCdadReacciones(TipoReaccion tp){ 
+            int reaccion = 0;
+
+            foreach (var r in _reacciones)
+            {
+                if (r.TipoReaccion == tp)
+                {
+                    reaccion++;
+                }
+            }
+            return reaccion;
+        }
         public int CompareTo(Publicacion? other)
         {
             int ret = 0;
@@ -133,6 +146,7 @@ namespace Aplicacion
             }
             return ret;
         }
+
         public override string ToString()
         {
             return $"Título: {Titulo}\nContenido: {Contenido}\nPrivacidad: {Privacidad}\nAutor: {Autor.Nombre} {Autor.Apellido}";

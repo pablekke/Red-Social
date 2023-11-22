@@ -11,10 +11,6 @@ namespace Aplicacion
     {
         #region Atributes
 
-        public string Nombre { get; set; }
-
-        public string Apellido { get; set; }
-
         public DateTime fNac { get; set; }
 
         private List<Miembro> _amigos = new List<Miembro>();
@@ -23,10 +19,8 @@ namespace Aplicacion
 
         #region Constructors
 
-        public Miembro(string nombre, string apellido, string email, string pass, bool esAdmin, DateTime fnac) : base(email, pass, esAdmin)
+        public Miembro(string nombre, string apellido, string email, string pass, bool esAdmin, DateTime fnac) : base(nombre, apellido, email, pass, esAdmin)
         {
-            Nombre = nombre;
-            Apellido = apellido;
             fNac = fnac;
         }
 
@@ -71,7 +65,6 @@ namespace Aplicacion
             {
                 throw new Exception("La fecha de nacimiento es inválida");
             }
-
         }
 
         public override string ToString()

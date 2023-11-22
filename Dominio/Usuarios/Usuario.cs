@@ -12,6 +12,8 @@ namespace Aplicacion
         #region Atributes
         private static int _ultimoId { get; set; }
         public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Apellido { get; set; }
         public string Email { get; set; }
         public string Pass { get; set; }
         public bool EsAdmin { get; set; }
@@ -20,9 +22,11 @@ namespace Aplicacion
 
         #region Constructors
 
-        public Usuario(string email, string pass, bool esAdmin)
+        public Usuario(string nombre, string apellido, string email, string pass, bool esAdmin)
         {
             Id = _ultimoId++;
+            Nombre = nombre;
+            Apellido = apellido;
             Email = email;
             Pass = pass;
             EsAdmin = esAdmin;
@@ -34,18 +38,17 @@ namespace Aplicacion
         #endregion
 
         #region Methods
-        public void ValidarCredenciales(string e, string p)
-        {
 
-        }
         public void Bloquear()
         {
             Bloqueado = true;
         }
+
         public void DesBloquear()
         {
             Bloqueado = false;
         }
+
         public virtual void EsValido()
         {
             if (String.IsNullOrEmpty(Email))
@@ -57,9 +60,10 @@ namespace Aplicacion
                 throw new Exception("Contraseña vacía");
             }
         }
+
         public virtual string ToString()
         {
-            return $"Email: {Email}\nContraseña: {Pass}\nEsAdmin: {EsAdmin}";
+            return $"Nombre: {Nombre}\nApellido: {Apellido}\nEmail: {Email}\nContraseña: {Pass}\nEsAdmin: {EsAdmin}";
         }
         #endregion
 

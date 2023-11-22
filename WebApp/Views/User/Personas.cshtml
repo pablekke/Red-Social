@@ -1,0 +1,148 @@
+﻿@model IEnumerable<Aplicacion.Miembro>
+
+
+@{
+    ViewData["Title"] = "Personas";
+    string rol = Context.Session.GetString("LogueadoRol");
+}
+
+<div class="container">
+    <h1>Personas</h1>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-6">
+            <form form method="post" class="d-flex">
+                <input type="text" name="criterio" class="form-control mx-2 mb-1" placeholder="Pablo Suarez..." />
+                <button type="submit" class="btn btn-primary btn-sm mb-1">
+                    🔎
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (Model != null)
+{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center align-middle">
+                                @Html.DisplayNameFor(model => model.Nombre)
+                            </th>
+                            <th class="text-center align-middle">
+                                @Html.DisplayNameFor(model => model.Apellido)
+                            </th>
+                            <th class="text-center align-middle">
+                                @Html.DisplayNameFor(model => model.Email)
+                            </th>
+                            <th class="text-center align-middle">
+                                Fecha de nacimiento
+                            </th>
+                            <th class="text-center align-middle">
+                                Estado
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var s = Dominio.Sistema.GetInstancia();
+                            <tr>
+                                <td class="text-center align-middle">
+                                    @Html.DisplayFor(modelItem => item.Nombre)
+                                </td>
+                                <td class="text-center align-middle">
+                                    @Html.DisplayFor(modelItem => item.Apellido)
+                                </td>
+                                <td class="text-center align-middle">
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td class="text-center align-middle">
+                                    @item.fNac.ToString("dd/MM/yyyy")
+                                </td>
+
+                                @if (rol == "Miembro")
+                                {
+                                    //Si el usuario logueado y el mostrado son amigos:
+                                    @if (s.SonAmigos(item.Id, Context.Session.GetInt32("LogueadoId")))
+                                    {
+                                        <td class="text-center align-middle">
+                                            <div class="d-flex">
+                                                <form asp-action="Perfil" method="post">
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                                    <button type="submit" class="btn-secondary mx-3 rounded-2">Ver perfil</button>
+                                                </form>
+                                                <p>@ViewBag.Error</p>
+                                            </div>
+                                        </td>
+                                    }
+                                    //Si el que solicitó la invitación fue el usuario mostrado
+                                    else if (s.ExisteInvitaciónPendiente(item.Id, Context.Session.GetInt32("LogueadoId")))
+                                    {
+                                        <td class="text-center align-middle">
+                                            <div class="d-flex">
+                                                <form asp-action="SolicitudesPendientes" method="get">
+                                                    <button type="submit" class="btn-secondary rounded-2">Pendiente</button>
+                                                </form>
+                                                <p>@ViewBag.Error</p>
+                                            </div>
+                                        </td>
+                                    }
+                                    //Si el que solicitó la invitación fue el usuario logueado
+                                    else if (s.ExisteInvitaciónPendiente(Context.Session.GetInt32("LogueadoId"), item.Id))
+                                    {
+                                        <td class="text-center align-middle">
+                                            <div class="d-flex">
+                                                <form asp-action="SolicitudesPendientes" method="get">
+                                                    <p class="btn-secondary rounded-2">Pendiente de aprobación ⌚</p>
+                                                </form>
+
+                                                <form asp-action="Perfil" method="post">
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                                    <button type="submit" class="btn-secondary mx-3">Ver perfil</button>
+                                                </form>
+                                                <p>@ViewBag.Error</p>
+                                            </div>
+                                        </td>
+                                    }
+                                    //Si los usuarios no tienen invitaciones previas o si alguna tiene estado rechazada
+                                    else
+                                    {
+                                        <td class="text-center align-middle">
+                                            <div class="d-flex">
+                                                <form asp-action="AñadirAmigo" method="post">
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                                    <button type="submit" class="btn-primary mx-3 rounded-2">Añadir amigo</button>
+                                                </form>
+
+                                                <form asp-action="Perfil" method="post">
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                                    <button type="submit" class="btn-secondary mx-3 rounded-2">Ver perfil</button>
+                                                </form>
+                                                <p>@ViewBag.Error</p>
+                                            </div>
+                                        </td>
+                                    }
+                                } else
+                                {
+                                    <form asp-action="Perfil" method="post">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn-secondary mx-3 rounded-2">Ver perfil</button>
+                                    </form>
+                                    <form asp-action="Bloquear" method="post">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn-secondary mx-3 rounded-2">Bloquear</button>
+                                    </form>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}

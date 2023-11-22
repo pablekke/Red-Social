@@ -10,7 +10,14 @@ namespace Aplicacion
 {
     public class Comentario:Publicacion, IValidacion
     {
-        public Comentario(string titulo, string contenido, Privacidad priv, Miembro autor) :base(titulo, contenido, priv, autor) { }
+        public Comentario(string titulo, string contenido, Privacidad priv, Miembro autor) :base(titulo, contenido, priv, autor) {
+            
+        }
+
+        public Comentario() : base()
+        {
+        }
+
 
         public override void EsValido()
         {

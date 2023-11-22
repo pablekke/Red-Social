@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Aplicacion.Invitacion>
+
+@{
+    ViewData["Title"] = "Solicitudes pendientes";
+}
+@if (Model.Count() != 0)
+{
+    <div class="container">
+        <h1>Solicitudes pendientes</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Solicitante
+                            </th>
+                            <th>
+                                Aceptar/rechazar
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Solicitante.Nombre @item.Solicitante.Apellido
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <form asp-action="AceptarSolicitud" method="post">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn-success mx-3 rounded-2">Aceptar</button>
+                                        </form>
+
+                                        <form asp-action="RechazarSolicitud" method="post">
+                                            <input type="hidden" name="id" value="@item.Id" class="btn-secondary" />
+                                            <button type="submit" class="btn-danger rounded-2">Rechazar</button>
+                                        </form>
+                                        <p>@ViewBag.Error</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid vw-100 d-flex justify-content-center align-items-center">
+        <h1 class="container-lg text-center d-block">
+            Parece que no tenés solicitudes pendientes!
+        </h1>
+        <h2 class="container-lg text-center"> <a href="../Publicacion" class="text-decoration-none text-dark">Volver al inicio</a></h2>
+    </div>
+
+}

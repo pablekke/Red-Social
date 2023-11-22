@@ -9,7 +9,7 @@ namespace Aplicacion
 {
     public class Admin:Usuario, IValidacion
     {
-        public Admin(string email, string pass, bool esAdmin) :base(email,pass,esAdmin) { }
+        public Admin(string nombre, string apellido, string email, string pass, bool esAdmin) :base(nombre,apellido,email,pass,esAdmin) { }
 
 
         #region Methods

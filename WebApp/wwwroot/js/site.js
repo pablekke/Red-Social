@@ -1,6 +1,6 @@
 ﻿/* MODO CLARO - OSCURO */
 
-let darkModeToggle = document.getElementById("dark-mode-toggle");
+/*let darkModeToggle = document.getElementById("dark-mode-toggle");
 let body = document.body;
 
 // Función para cambiar al modo oscuro
@@ -88,5 +88,5 @@ darkModeToggle.addEventListener("click", function () {
         enableDarkMode();
     }
 });
-
+*/
 /* MODO CLARO - OSCURO */

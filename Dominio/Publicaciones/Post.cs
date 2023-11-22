@@ -27,7 +27,9 @@ namespace Aplicacion
             Censurada = false;
         }
 
-        public Post() : base() { }
+        public Post() : base() {
+            Censurada = false;
+        }
 
         #endregion
 
@@ -49,6 +51,21 @@ namespace Aplicacion
             _comentarios.Add(c);
         }
 
+        public void DropComentario(Comentario c)
+        {
+            if (c is null)
+            {
+                throw new Exception("Comentario vacío");
+            }
+
+            if (c.Autor.EsAdmin)
+            {
+                throw new Exception("Los administradores no pueden realizar comentarios.");
+            }
+
+            _comentarios.Remove(c);
+        }
+
         public List<Comentario> GetComentarios()
         {
             return _comentarios;
@@ -60,7 +77,7 @@ namespace Aplicacion
         public override void EsValido()
         {
             base.EsValido();
-            if (!Img.EndsWith(".jpg") && !Img.EndsWith(".png"))
+            if (!Img.EndsWith(".jpg") && !Img.EndsWith(".png") && !Img.EndsWith(".jpeg"))
             {
                 throw new Exception("La imagen no posee un formato válido");
             }
