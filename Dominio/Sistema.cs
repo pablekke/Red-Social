@@ -43,7 +43,7 @@ namespace Dominio
 
         #region Get Methods
 
-        public List<Miembro> GetAmigos(Miembro m)
+        public List<Miembro?> GetAmigos(Miembro? m)
         {
             return m.GetAmigos();
         }
@@ -117,7 +117,7 @@ namespace Dominio
             }
             return pends;
         }
-        public Invitacion GetSolicitudById(int? idSolicitud)
+        public Invitacion? GetSolicitudById(int? idSolicitud)
         {
             Invitacion? inv = null;
 
@@ -131,7 +131,7 @@ namespace Dominio
             }
             return inv;
         }
-        public Invitacion GetSolicitudByIdDeMiembro(int? idMiembro)
+        public Invitacion? GetSolicitudByIdDeMiembro(int? idMiembro)
         {
             Invitacion? inv = null;
 
@@ -291,9 +291,9 @@ namespace Dominio
 
         #region Publications
 
-        public Publicacion GetPublicacionById(int publicacionId)
+        public Publicacion? GetPublicacionById(int publicacionId)
         {
-            Publicacion p = null;
+            Publicacion? p = null;
 
             foreach (var publicacion in _publicaciones)
             {
@@ -307,9 +307,9 @@ namespace Dominio
             return p;
         }
 
-        public Post GetPostById(int postId)
+        public Post? GetPostById(int? postId)
         {
-            Post p = null;
+            Post? p = null;
 
             foreach (var post in GetAllPosts(_publicaciones))
             {
@@ -323,9 +323,9 @@ namespace Dominio
             return p;
         }
 
-        public Comentario GetCommentById(int commentId)
+        public Comentario? GetCommentById(int commentId)
         {
-            Comentario c = null;
+            Comentario? c = null;
 
             foreach (var comment in GetAllComentarios())
             {
@@ -375,7 +375,7 @@ namespace Dominio
             i.Declinar();
         }
 
-        public void CensurarPost(Post p)
+        public void CensurarPost(Post? p)
         {
             if (p is null)
             {
@@ -499,13 +499,18 @@ namespace Dominio
             lista.Sort();
             return lista;
         }
+        public List<Miembro> OrdenarPorNombreYApellido(List<Miembro?> lista)
+        {
+            lista.Sort();
+            return lista;
+        }
         #endregion
 
         #region Users
 
-        public List<Miembro> BuscarMiembros(string criterio, int? idLogueado)
+        public List<Miembro?> BuscarMiembros(string criterio, int? idLogueado)
         {
-            List<Miembro> ret = new List<Miembro>();
+            List<Miembro?> ret = new List<Miembro>();
             foreach (var m in GetMiembros())
             {
                 string nombre = m.Nombre.ToLower();
@@ -586,7 +591,7 @@ namespace Dominio
         }
 
 
-        public void Bloquear(Usuario u)
+        public void Bloquear(Miembro? u)
         {
             if (u is null)
             {
@@ -596,7 +601,7 @@ namespace Dominio
             u.Bloquear();
         }
 
-        public void DesBloquear(Usuario u)
+        public void DesBloquear(Miembro? u)
         {
             if (u is null)
             {

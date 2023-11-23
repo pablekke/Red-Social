@@ -23,6 +23,7 @@
 
 @if (Model != null)
 {
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -71,11 +72,7 @@
                                     {
                                         <td class="text-center align-middle">
                                             <div class="d-flex">
-                                                <form asp-action="Perfil" method="post">
-                                                    <input type="hidden" name="id" value="@item.Id" />
-                                                    <button type="submit" class="btn-secondary mx-3 rounded-2">Ver perfil</button>
-                                                </form>
-                                                <p>@ViewBag.Error</p>
+                                                <p class="btn-success mx-3 rounded-2">Ya son amigos!</p>
                                             </div>
                                         </td>
                                     }
@@ -99,11 +96,6 @@
                                                 <form asp-action="SolicitudesPendientes" method="get">
                                                     <p class="btn-secondary rounded-2">Pendiente de aprobación ⌚</p>
                                                 </form>
-
-                                                <form asp-action="Perfil" method="post">
-                                                    <input type="hidden" name="id" value="@item.Id" />
-                                                    <button type="submit" class="btn-secondary mx-3">Ver perfil</button>
-                                                </form>
                                                 <p>@ViewBag.Error</p>
                                             </div>
                                         </td>
@@ -117,25 +109,32 @@
                                                     <input type="hidden" name="id" value="@item.Id" />
                                                     <button type="submit" class="btn-primary mx-3 rounded-2">Añadir amigo</button>
                                                 </form>
-
-                                                <form asp-action="Perfil" method="post">
-                                                    <input type="hidden" name="id" value="@item.Id" />
-                                                    <button type="submit" class="btn-secondary mx-3 rounded-2">Ver perfil</button>
-                                                </form>
                                                 <p>@ViewBag.Error</p>
                                             </div>
                                         </td>
                                     }
-                                } else
+                                }
+                                else
                                 {
-                                    <form asp-action="Perfil" method="post">
-                                        <input type="hidden" name="id" value="@item.Id" />
-                                        <button type="submit" class="btn-secondary mx-3 rounded-2">Ver perfil</button>
-                                    </form>
-                                    <form asp-action="Bloquear" method="post">
-                                        <input type="hidden" name="id" value="@item.Id" />
-                                        <button type="submit" class="btn-secondary mx-3 rounded-2">Bloquear</button>
-                                    </form>
+                                    <td class="text-center align-middle">
+                                        <div class="d-flex">
+                                            @if (s.MiembroById(item.Id).Bloqueado)
+                                            {
+                                                <form asp-action="DesBloquear" method="post">
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                                    <button type="submit" class="btn-primary mx-3 rounded-2">Desbloquear</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form asp-action="Bloquear" method="post">
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                                    <button type="submit" class="btn-danger mx-3 rounded-2">Bloquear</button>
+                                                </form>
+                                            }
+                                        </div>
+                                        <p>@ViewBag.Error</p>
+                                    </td>
                                 }
                             </tr>
                         }

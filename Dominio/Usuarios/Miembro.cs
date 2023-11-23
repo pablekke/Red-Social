@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aplicacion
 {
-    public class Miembro : Usuario, IValidacion
+    public class Miembro : Usuario, IValidacion, IComparable<Miembro?>
     {
         #region Atributes
 
@@ -70,6 +70,32 @@ namespace Aplicacion
         public override string ToString()
         {
             return  base.ToString() + $"\nNombre: {Nombre}\nApellido: {Apellido}\nFecha de Nacimiento: {fNac}";
+        }
+
+        public int CompareTo(Miembro? other)
+        {
+            int ret = 0;
+
+            if (Nombre.CompareTo(other.Nombre) > 0)
+            {
+                ret = 1;
+            }
+            else if (Nombre.CompareTo(other.Nombre) < 0)
+            {
+                ret = -1;
+            }
+            else
+            {
+                if (Apellido.CompareTo(other.Apellido) > 0)
+                {
+                    ret = 1;
+                }
+                if (Apellido.CompareTo(other.Apellido) < 0)
+                {
+                    ret = -1;
+                }
+            }
+            return ret;
         }
         #endregion
 

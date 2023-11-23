@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using static System.Net.Mime.MediaTypeNames;
+using System.Security.Cryptography;
 
 namespace WebApp.Controllers
 {
@@ -25,12 +26,19 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
-            int? idLogueado = HttpContext.Session.GetInt32("LogueadoId");
-            if (idLogueado == null)
+            int? lid = HttpContext.Session.GetInt32("LogueadoId");
+            if (lid == null)
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(PostsHablilitados(idLogueado));
+
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+            if (rol == "Admin")
+            {
+                return RedirectToAction("BuscarPublicaciones", "Publicacion");
+            }
+
+            return View(PostsHablilitados(lid));
         }
 
         public IActionResult BuscarPublicaciones()
@@ -84,13 +92,13 @@ namespace WebApp.Controllers
             {
                 if (idLogueado != null)
                 {
-                    Miembro m = s.MiembroById(idLogueado.Value);
+                    Miembro? m = s.MiembroById(idLogueado.Value);
 
                     if (!m.Bloqueado)
                     {
                         Privacidad priv = privacidadCheckbox ? Privacidad.privada : Privacidad.publica;
 
-                        Post p = s.GetPostById(idPost);
+                        Post? p = s.GetPostById(idPost);
 
                         Comentario comentario = new Comentario(tituloComentario, contenidoComentario, priv, m);
 
@@ -164,11 +172,17 @@ namespace WebApp.Controllers
         public IActionResult Publicar()
         {
             int? idLogueado = HttpContext.Session.GetInt32("LogueadoId");
-
             if (idLogueado == null)
             {
                 return RedirectToAction("Index", "Home");
             }
+
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+            if (rol == "Admin")
+            {
+                return RedirectToAction("BuscarPublicaciones", "Publicacion");
+            }
+
             return View();
         }
 
@@ -176,7 +190,6 @@ namespace WebApp.Controllers
         public IActionResult Publicar(Post nuevo, IFormFile foto, Privacidad privacidad)
         {
             int? lid = HttpContext.Session.GetInt32("LogueadoId");
-
             try
             {
                 if (foto == null)
@@ -188,10 +201,7 @@ namespace WebApp.Controllers
                 {
                     throw new Exception("El post no puede ser nulo");
                 }
-                if (privacidad == null)
-                {
-                    throw new Exception("La privacidad no puede ser nula");
-                }
+
                 SubirFoto(foto, lid);
 
                 /* <------------ Renombro la imagen ------------>*/
@@ -209,7 +219,7 @@ namespace WebApp.Controllers
 
                 s.AddPost(nuevo);
 
-                return RedirectToAction("Index", "Publicaciones");
+                return RedirectToAction("Index", "Publicacion");
             }
             catch (Exception e)
             {
@@ -248,7 +258,7 @@ namespace WebApp.Controllers
         {
             int? idLogueado = HttpContext.Session.GetInt32("LogueadoId");
 
-            string rol = HttpContext.Session.GetString("LogueadoRol");
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
 
             List<Post> Allposts = s.GetAllPosts(PublicacionesHablilitadas(id));
 
@@ -256,11 +266,13 @@ namespace WebApp.Controllers
             {
                 List<Post> posts = new List<Post>();
                 Miembro? Logueado = s.MiembroById(id);
-                List<Miembro>? AmigosLogueado = s.GetAmigos(Logueado);
+                List<Miembro?> AmigosLogueado = s.GetAmigos(Logueado);
 
                 foreach (Post post in Allposts)
                 {
-                    if (post.Privacidad == Privacidad.publica || AmigosLogueado.Contains(post.Autor) || post.Autor.Id == idLogueado)
+                    if (post.Privacidad == Privacidad.publica && !post.Censurada
+                        || AmigosLogueado.Contains(post.Autor) 
+                        || post.Autor.Id == idLogueado)
                     {
                         posts.Add(post);
                     }
@@ -286,7 +298,9 @@ namespace WebApp.Controllers
 
                 foreach (Publicacion p in AllPubList)
                 {
-                    if (p.Privacidad == Privacidad.publica || AmigosLogueado.Contains(p.Autor) || p.Autor.Id == id)
+                    if (p.Privacidad == Privacidad.publica 
+                        || AmigosLogueado.Contains(p.Autor) 
+                        || p.Autor.Id == id)
                     {
                         pub.Add(p);
                     }
@@ -297,6 +311,54 @@ namespace WebApp.Controllers
             return AllPubList;
         }
 
+        #endregion
+
+        #region Admins
+        public IActionResult CensurarPost(int? id)
+        {
+            int? idLogueado = HttpContext.Session.GetInt32("LogueadoId");
+
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+
+            if (idLogueado == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (rol == "Admin")
+            {
+                try
+                {
+                    s.CensurarPost(s.GetPostById(id));
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = ex.Message;
+                }
+            }
+            return RedirectToAction("BuscarPublicaciones", "Publicacion");
+        }
+        public IActionResult DesCensurarPost(int? id)
+        {
+            int? idLogueado = HttpContext.Session.GetInt32("LogueadoId");
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+
+            if (idLogueado == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (rol == "Admin")
+            {
+                try { 
+                    s.DesCensurarPost(s.GetPostById(id));
+                } catch (Exception ex)
+                {
+                    ViewBag.Error = ex.Message;
+                }
+            }
+            return RedirectToAction("BuscarPublicaciones", "Publicacion");
+        }
         #endregion
     }
 }

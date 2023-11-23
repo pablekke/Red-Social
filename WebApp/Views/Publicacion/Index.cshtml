@@ -49,27 +49,30 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center">
-                        <form asp-action="ComentarPost" asp-controller="Publicacion" method="post" class="m-1">
-                            <div class="m-2">
-                                <input type="hidden" value="@p.Id" name="idPost">
-                                <input class="d-block" type="text" name="tituloComentario" placeholder="Ingrese un título">
-                            </div>
-                            <div class="m-2">
-                                <input class="d-block" type="text" name="contenidoComentario" placeholder="Ingresá un comentario">
-                            </div>
-                            <div class="m-2 d-block">
-                                <label for="checkbox" class="form-check-label">Privado</label>
-                                <input id="checkbox" name="privacidadCheckbox" type="checkbox" class="form-check-input" value="true" />
-                                <input type="hidden" name="privacidadCheckbox" value="false" />
-                            </div>
-                            <div class="m-2">
-                                <input type="submit" class="btn btn-primary" value="Agregar comentario">
-                                <p class="text-danger">@ViewBag.Error</p>
-                            </div>
-                            <p></p>@ViewBag.Error
-                        </form>
-                    </div>
+                    @if (!s.MiembroById(idL).Bloqueado)
+                    {
+                        <div class="d-flex justify-content-center">
+                            <form asp-action="ComentarPost" asp-controller="Publicacion" method="post" class="m-1">
+                                <div class="m-2">
+                                    <input type="hidden" value="@p.Id" name="idPost">
+                                    <input class="d-block" type="text" name="tituloComentario" placeholder="Ingrese un título">
+                                </div>
+                                <div class="m-2">
+                                    <input class="d-block" type="text" name="contenidoComentario" placeholder="Ingresá un comentario">
+                                </div>
+                                <div class="m-2 d-block">
+                                    <label for="checkbox" class="form-check-label">Privado</label>
+                                    <input id="checkbox" name="privacidadCheckbox" type="checkbox" class="form-check-input" value="true" />
+                                    <input type="hidden" name="privacidadCheckbox" value="false" />
+                                </div>
+                                <div class="m-2">
+                                    <input type="submit" class="btn btn-primary" value="Agregar comentario">
+                                    <p class="text-danger">@ViewBag.Error</p>
+                                </div>
+                                <p></p>@ViewBag.Error
+                            </form>
+                        </div>
+                    }
                 </div>
             </div>
         }

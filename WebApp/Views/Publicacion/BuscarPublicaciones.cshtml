@@ -1,14 +1,18 @@
 ﻿@model IEnumerable<Aplicacion.Publicacion>
 
+@{
+    string rol = Context.Session.GetString("LogueadoRol");
+}
+
 @if (Model.Count() != 0)
 {
     <div class="container">
         <form method="post" class="container-fluid text-center">
             <h2>Buscar post:</h2>
-            <input type="number" name="VA" placeholder="Ingresá un VA" /> <br />
-            <input type="text" name="criterio" placeholder="Ingresá una palabra" />
+            <input class="m-2" type="number" name="VA" placeholder="Ingresá un VA" /> <br />
+            <input class="m-2" type="text" name="criterio" placeholder="Ingresá una palabra" />
 
-            <button type="submit" class=" mb-1">🔎</button>
+            <button type="submit" class="rounded-2 mb-1">🔎</button>
         </form>
     </div>
     <div class="container">
@@ -19,6 +23,15 @@
                 var post = p as Aplicacion.Post;
                 <div class="container-fluid text-center">
                     <div class="mx-auto">
+                        @if (rol == "Admin")
+                        {
+                            if(post.Censurada){
+                                @Html.ActionLink("Desbanear", "DesCensurarPost", "Publicacion", new { id = p.Id }, new { @class = "btn btn-success btn-lg like-btn" })
+                            } else
+                            {
+                                @Html.ActionLink("Banear", "CensurarPost", "Publicacion", new { id = p.Id }, new { @class = "btn btn-danger btn-lg like-btn" })
+                            }
+                        }
                         <h3><strong class="text-info">Publicacion: </strong> @p.Autor.Nombre @p.Autor.Apellido - @p.Titulo</h3>
 
                         <img src="/img/User/Posts/@post.Img" alt="@post.Img" class="img-fluid imgPost">
@@ -34,7 +47,6 @@
             else
             {
                 var comentario = p as Aplicacion.Comentario;
-
                 <div class="container-fluid text-center bg-secondary">
                     <div class="mx-auto">
                         <h3 class="text-white"><strong class="text-white-50">Comentario: </strong> @comentario.Autor.Nombre @p.Autor.Apellido - @p.Titulo</h3>

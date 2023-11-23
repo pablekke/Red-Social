@@ -2,6 +2,7 @@
 using Dominio;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace WebApp.Controllers
 {
@@ -11,10 +12,12 @@ namespace WebApp.Controllers
 
         private bool checkboxPrivacidad;
 
-        public IActionResult Index()
+        /* public IActionResult Index()
         {
             return View();
-        }
+        }*/
+
+        #region Members
 
         #region People
         public IActionResult Personas()
@@ -24,7 +27,8 @@ namespace WebApp.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(s.BuscarMiembros("", lid));
+            var listaOrdenada = s.OrdenarPorNombreYApellido(s.BuscarMiembros("", lid));
+            return View(listaOrdenada);
         }
 
         [HttpPost]
@@ -38,11 +42,15 @@ namespace WebApp.Controllers
 
             if (String.IsNullOrEmpty(criterio))
             {
-                return View(s.GetMiembros());
+                var listaSinCriterio = s.OrdenarPorNombreYApellido(s.BuscarMiembros("", lid));
+                return View(listaSinCriterio);
             }
+            var listaOrdenada = s.OrdenarPorNombreYApellido(s.BuscarMiembros(criterio, lid));
+            return View(listaOrdenada);
 
-            return View(s.BuscarMiembros(criterio, lid));
         }
+
+
 
         public IActionResult SolicitudesPendientes()
         {
@@ -51,6 +59,13 @@ namespace WebApp.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+            if (rol == "Admin")
+            {
+                return RedirectToAction("BuscarPublicaciones", "Publicacion");
+            }
+
             return View(s.GetSolicitudesPendientes(lid));
         }
 
@@ -60,8 +75,9 @@ namespace WebApp.Controllers
             int? lid = HttpContext.Session.GetInt32("LogueadoId");
             try
             {
-                if (!s.ExisteInvitaciónRechazada(lid, id)) { 
-                    Invitacion i = new Invitacion(s.MiembroById(lid), s.MiembroById(id));
+                if (!s.ExisteInvitaciónRechazada(lid, id))
+                {
+                    Invitacion? i = new Invitacion(s.MiembroById(lid), s.MiembroById(id));
                     s.EnviarInvitacion(i);
                 }
                 else
@@ -111,6 +127,18 @@ namespace WebApp.Controllers
         #region Registrer
         public IActionResult Registro()
         {
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+
+            if (rol == "Miembro")
+            {
+                return RedirectToAction("Index", "Publicacion");
+            }
+
+            if (rol == "Admin")
+            {
+                return RedirectToAction("BuscarPublicaciones", "Publicacion");
+            }
+
             return View();
         }
 
@@ -136,6 +164,18 @@ namespace WebApp.Controllers
         #region Login
         public IActionResult Login()
         {
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+
+            if (rol == "Miembro")
+            {
+                return RedirectToAction("Index", "Publicacion");
+            }
+
+            if (rol == "Admin")
+            {
+                return RedirectToAction("BuscarPublicaciones", "Publicacion");
+            }
+
             return View();
         }
 
@@ -156,7 +196,8 @@ namespace WebApp.Controllers
                     HttpContext.Session.SetString("LogueadoFnac", aux.fNac.ToString());
                     return RedirectToAction("Index", "Publicacion");
                 }
-                else {
+                else
+                {
                     return RedirectToAction("BuscarPublicaciones", "Publicacion");
                 }
 
@@ -178,7 +219,43 @@ namespace WebApp.Controllers
         }
         #endregion
 
+        #endregion
 
+        #region Admins
+        public IActionResult Bloquear(int? id)
+        {
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+            if (rol == "Admin")
+            {
+                try
+                {
+                    Miembro? m = s.MiembroById(id);
+                    s.Bloquear(m);
+                } catch (Exception ex)
+                {
+                    ViewBag.Error = ex.Message;
+                }
+            }
+            return RedirectToAction("Personas", "User");
+        }
+        public IActionResult DesBloquear(int? id)
+        {
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+            if (rol == "Admin")
+            {
+                try
+                {
+                    Miembro? m = s.MiembroById(id);
+                    s.DesBloquear(m);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = ex.Message;
+                }
+            }
+            return RedirectToAction("Personas", "User");
+        }
+        #endregion
     }
 
 }

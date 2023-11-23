@@ -15,6 +15,18 @@ namespace WebApp.Controllers
         }
         public IActionResult Index()
         {
+            string? rol = HttpContext.Session.GetString("LogueadoRol");
+
+            if (rol == "Miembro")
+            {
+                return RedirectToAction("Index", "Publicacion");
+            }
+            
+            if (rol == "Admin")
+            {
+                return RedirectToAction("BuscarPublicaciones", "Publicacion");
+            }
+
             return View();
         }
 
