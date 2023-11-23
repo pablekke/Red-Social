@@ -510,7 +510,7 @@ namespace Dominio
 
         public List<Miembro?> BuscarMiembros(string criterio, int? idLogueado)
         {
-            List<Miembro?> ret = new List<Miembro>();
+            List<Miembro?> ret = new List<Miembro?>();
             foreach (var m in GetMiembros())
             {
                 string nombre = m.Nombre.ToLower();
@@ -541,8 +541,10 @@ namespace Dominio
         public bool SonAmigos(int? id1, int? id2)
         {
             bool sonAmigos = false;
+
             Miembro? m1 = MiembroById(id1);
             Miembro? m2 = MiembroById(id2);
+
             if (m1.GetAmigos().Contains(m2))
             {
                 sonAmigos = true;
@@ -589,7 +591,6 @@ namespace Dominio
             }
             return existe;
         }
-
 
         public void Bloquear(Miembro? u)
         {

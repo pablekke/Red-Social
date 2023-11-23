@@ -40,7 +40,5 @@ namespace Aplicacion
         {
             return $"Tipo de reaccion: {TipoReaccion}\nMiembro: {Miembro.Nombre} {Miembro.Apellido}";
         }
-        
-
     }
 }

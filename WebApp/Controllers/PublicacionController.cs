@@ -64,8 +64,9 @@ namespace WebApp.Controllers
 
             if (String.IsNullOrEmpty(criterio))
             {
-                return View(PostsHablilitados(idLogueado));
+                return View(PublicacionesHablilitadas(idLogueado));
             }
+            
             else
             {
                 List<Publicacion> pubsFiltradas = new List<Publicacion>();

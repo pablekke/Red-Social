@@ -50,8 +50,6 @@ namespace WebApp.Controllers
 
         }
 
-
-
         public IActionResult SolicitudesPendientes()
         {
             int? lid = HttpContext.Session.GetInt32("LogueadoId");

@@ -51,21 +51,6 @@ namespace Aplicacion
             _comentarios.Add(c);
         }
 
-        public void DropComentario(Comentario c)
-        {
-            if (c is null)
-            {
-                throw new Exception("Comentario vacío");
-            }
-
-            if (c.Autor.EsAdmin)
-            {
-                throw new Exception("Los administradores no pueden realizar comentarios.");
-            }
-
-            _comentarios.Remove(c);
-        }
-
         public List<Comentario> GetComentarios()
         {
             return _comentarios;
